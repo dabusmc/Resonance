@@ -13,12 +13,15 @@ namespace Resonance
     public:
         Card(CardType type, int position);
 
-        CardType GetType() { return m_Type; }
-        int GetPosition() { return m_Position; }
-        bool IsHovered() { return m_Hovered;}
+        CardType GetType() const { return m_Type; }
+        int GetPosition() const { return m_Position; }
+        bool IsHovered() const { return m_Hovered; }
+        bool IsSelected() const { return m_Selected; }
 
         void UpdateHovered(int mouseX, int mouseY);
         void SetHovered(bool hovered);
+
+        void SetSelected(bool selected);
 
         virtual void Draw() = 0;
 
@@ -28,7 +31,9 @@ namespace Resonance
 
     protected:
         CardType m_Type;
-        bool m_Hovered;
         int m_Position;
+
+        bool m_Hovered;
+        bool m_Selected;
     };
 }

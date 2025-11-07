@@ -23,7 +23,7 @@ endif()
 
 # Our Project
 
-set(SOURCE src/main.cpp src/Application.cpp src/Cards/Card.cpp src/Cards/SineCard.cpp src/Cards/Hand.cpp)
+set(SOURCE src/main.cpp src/Application.cpp src/Cards/Card.cpp src/Cards/SineCard.cpp src/Cards/Hand.cpp src/Utility/Button.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 target_link_libraries(${PROJECT_NAME} raylib)

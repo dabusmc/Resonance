@@ -30,6 +30,11 @@ namespace Resonance
         m_Hovered = hovered;
     }
 
+    void Card::SetSelected(bool selected)
+    {
+        m_Selected = selected;
+    }
+
     int Card::GetXPosition()
     {
         return 640 - (m_Position - 2) * 120 - 45;
@@ -37,6 +42,11 @@ namespace Resonance
 
     int Card::GetYPosition()
     {
+        if (m_Selected)
+        {
+            return 720 - 195;
+        }
+
         return 720 - 155 - m_Hovered * 20;
     }
 }
