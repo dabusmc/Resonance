@@ -9,6 +9,6 @@ namespace Resonance
     public:
         SineCard(int position);
 
-        void Draw(bool hovered) override;
+        void Draw() override;
     };
 }

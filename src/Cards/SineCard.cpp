@@ -10,8 +10,8 @@ namespace Resonance
 
     }
 
-    void SineCard::Draw(bool hovered)
+    void SineCard::Draw()
     {
-        DrawRectangle(GetXPosition(), GetYPosition() - hovered * 20, 90, 135, WHITE);
+        DrawRectangle(GetXPosition(), GetYPosition(), 90, 135, WHITE);
     }
 }

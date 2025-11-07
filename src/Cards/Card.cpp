@@ -3,19 +3,31 @@
 namespace Resonance
 {
     Card::Card(CardType type, int position)
-        : m_Type(type), m_Position(position)
+        : m_Type(type), m_Position(position), m_Hovered(false)
     {
 
     }
 
-    bool Card::IsHovered(int mouseX, int mouseY)
+    void Card::UpdateHovered(int mouseX, int mouseY)
     {
         int x = GetXPosition();
         int y = GetYPosition();
         int width = 90;
         int height = 135;
 
-        return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
+        if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height)
+        {
+            m_Hovered = true;
+        }
+        else
+        {
+            m_Hovered = false;
+        }
+    }
+
+    void Card::SetHovered(bool hovered)
+    {
+        m_Hovered = hovered;
     }
 
     int Card::GetXPosition()
@@ -25,6 +37,6 @@ namespace Resonance
 
     int Card::GetYPosition()
     {
-        return 720 - 155;
+        return 720 - 155 - m_Hovered * 20;
     }
 }
