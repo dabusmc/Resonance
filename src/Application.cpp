@@ -1,12 +1,16 @@
 #include "Application.h"
 
 #include <iostream>
-#include <bits/ostream.tcc>
 
 #include "raylib.h"
 
 #include "Cards/Hand.h"
+#include "Cards/Deck.h"
+#include "Cards/SineCard.h"
+#include "Cards/EchoCard.h"
+
 #include "Utility/Button.h"
+#include "Utility/Random.h"
 
 namespace Resonance
 {
@@ -26,8 +30,15 @@ namespace Resonance
 
     void Application::Run()
     {
+        Deck deck;
+        deck.AddCard<SineCard>();
+        deck.AddCard<SineCard>();
+        deck.AddCard<SineCard>();
+        deck.AddCard<EchoCard>();
+        deck.AddCard<EchoCard>();
+
         Hand hand;
-        hand.Construct();
+        hand.Construct(deck);
 
         ButtonProps attackProps;
         attackProps.Text = "Attack";
@@ -47,7 +58,7 @@ namespace Resonance
         {
             hand.Update();
 
-            if (hand.GetSelectedCount() == 3)
+            if (hand.CanAttack())
             {
                 attackButton.Enable();
             }

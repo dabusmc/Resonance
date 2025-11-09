@@ -11,12 +11,16 @@ namespace Resonance
     class Card
     {
     public:
+        Card(CardType type);
         Card(CardType type, int position);
+        virtual ~Card() = default;
 
         CardType GetType() const { return m_Type; }
         int GetPosition() const { return m_Position; }
         bool IsHovered() const { return m_Hovered; }
         bool IsSelected() const { return m_Selected; }
+
+        void SetPosition(int position);
 
         void UpdateHovered(int mouseX, int mouseY);
         void SetHovered(bool hovered);

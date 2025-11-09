@@ -1,6 +1,7 @@
 #include "Hand.h"
 
 #include "SineCard.h"
+#include "EchoCard.h"
 
 #include "raylib.h"
 
@@ -15,21 +16,14 @@ namespace Resonance
 
     Hand::~Hand()
     {
-        for (int i = 0; i < m_Hand.size(); i++)
-        {
-            if (m_Hand[i] != nullptr)
-            {
-                delete m_Hand[i];
-            }
-        }
     }
 
-    void Hand::Construct()
+    void Hand::Construct(Deck& deck)
     {
-        // NOTE: This will be replaced with drawing from the deck
         for (int i = 0; i < 5; i++)
         {
-            m_Hand[i] = new SineCard(i);
+            m_Hand[i] = deck.DrawCard();
+            m_Hand[i]->SetPosition(i);
         }
     }
 
@@ -80,5 +74,23 @@ namespace Resonance
         {
             m_Hand[i]->Draw();
         }
+    }
+
+    bool Hand::CanAttack()
+    {
+        if (m_Selected.size() == 3)
+        {
+            for (auto& i : m_Selected)
+            {
+                if (m_Hand[i]->GetType() == CardType::Waveform)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return false;
     }
 }

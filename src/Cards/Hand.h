@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Card.h"
+#include "Deck.h"
 
 namespace Resonance
 {
@@ -13,13 +14,13 @@ namespace Resonance
         Hand();
         ~Hand();
 
-        void Construct();
+        void Construct(Deck& deck);
 
         void Update();
 
         void Draw();
 
-        int GetSelectedCount() const { return m_Selected.size(); }
+        bool CanAttack();
 
     private:
         std::array<Card*, 5> m_Hand;

@@ -2,10 +2,21 @@
 
 namespace Resonance
 {
+    Card::Card(CardType type)
+        : m_Type(type)
+    {
+        m_Position = -1;
+    }
+
     Card::Card(CardType type, int position)
         : m_Type(type), m_Position(position), m_Hovered(false)
     {
 
+    }
+
+    void Card::SetPosition(int position)
+    {
+        m_Position = position;
     }
 
     void Card::UpdateHovered(int mouseX, int mouseY)
