@@ -26,12 +26,16 @@ endif()
 set(SOURCE src/main.cpp
         src/Application.cpp
         src/Cards/Card.cpp
-        src/Cards/SineCard.cpp
+        src/Cards/Types/SineCard.cpp
         src/Cards/Hand.cpp
         src/Utility/Button.cpp
-        src/Cards/EchoCard.cpp
+        src/Cards/Types/EchoCard.cpp
         src/Cards/Deck.cpp
-        src/Utility/Random.cpp)
+        src/Utility/Random.cpp
+        src/Cards/Types/PhaseCard.cpp
+        src/Cards/Types/LowFrequencyCard.cpp
+        src/Enemies/Enemy.cpp
+        src/Enemies/TestEnemy.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 target_link_libraries(${PROJECT_NAME} raylib)

@@ -2,20 +2,31 @@
 
 namespace Resonance
 {
-    enum class CardType
+    enum class CardCategory
     {
         Waveform = 0,
         Amplitude, Frequency, Utility
     };
 
+    enum class CardType
+    {
+        None = 0,
+        Sine,
+        Echo,
+        LowFrequency,
+        Phase
+    };
+
     class Card
     {
     public:
-        Card(CardType type);
+        static CardCategory GetCategoryFromType(CardType type);
+
         Card(CardType type, int position);
         virtual ~Card() = default;
 
-        CardType GetType() const { return m_Type; }
+        CardType GetCardType() const { return m_Type; }
+        CardCategory GetCategory() const { return m_Category; }
         int GetPosition() const { return m_Position; }
         bool IsHovered() const { return m_Hovered; }
         bool IsSelected() const { return m_Selected; }
@@ -35,6 +46,7 @@ namespace Resonance
 
     protected:
         CardType m_Type;
+        CardCategory m_Category;
         int m_Position;
 
         bool m_Hovered;

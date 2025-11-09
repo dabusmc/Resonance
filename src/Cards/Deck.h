@@ -12,22 +12,17 @@ namespace Resonance
 		Deck();
 		~Deck();
 
-		template<typename T, typename... Args>
-		size_t AddCard(Args&& ... args)
-		{
-			T* card = new T(std::forward<Args>(args)...);
-			m_Deck.push_back(card);
-			return m_Deck.size() - 1;
-		}
-
+		size_t AddCard(CardType type);
 		void RemoveCard(size_t index);
 
-		Card* DrawCard();
+		CardType DrawWaveformCard();
+		CardType DrawCard();
 
 		void Reset();
 
 	private:
-		std::vector<Card*> m_Deck;
+		std::vector<CardType> m_Deck;
 		std::vector<size_t> m_SkipCards;
+		std::vector<size_t> m_WaveformCards;
 	};
 }

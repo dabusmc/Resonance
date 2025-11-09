@@ -1,13 +1,12 @@
 #pragma once
 
-#include "Card.h"
+#include "Cards/Card.h"
 
 namespace Resonance
 {
 	class EchoCard : public Card
 	{
 	public:
-		EchoCard();
 		EchoCard(int position);
 
 		void Draw() override;

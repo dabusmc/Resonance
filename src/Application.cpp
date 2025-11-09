@@ -6,11 +6,10 @@
 
 #include "Cards/Hand.h"
 #include "Cards/Deck.h"
-#include "Cards/SineCard.h"
-#include "Cards/EchoCard.h"
+
+#include "Enemies/TestEnemy.h"
 
 #include "Utility/Button.h"
-#include "Utility/Random.h"
 
 namespace Resonance
 {
@@ -31,11 +30,14 @@ namespace Resonance
     void Application::Run()
     {
         Deck deck;
-        deck.AddCard<SineCard>();
-        deck.AddCard<SineCard>();
-        deck.AddCard<SineCard>();
-        deck.AddCard<EchoCard>();
-        deck.AddCard<EchoCard>();
+
+        for (int i = 0; i < 5; i++)
+        {
+            deck.AddCard(CardType::Sine);
+            deck.AddCard(CardType::Echo);
+            deck.AddCard(CardType::LowFrequency);
+            deck.AddCard(CardType::Phase);
+        }
 
         Hand hand;
         hand.Construct(deck);
@@ -54,6 +56,8 @@ namespace Resonance
             std::cout << "Attack!!!!!" << std::endl;
         });
 
+        TestEnemy testEnemy;
+
         while (!WindowShouldClose())
         {
             hand.Update();
@@ -71,6 +75,8 @@ namespace Resonance
 
             BeginDrawing();
                 ClearBackground(BLACK);
+                DrawFPS(12, 12);
+                testEnemy.Draw();
                 hand.Draw();
                 attackButton.Draw();
             EndDrawing();

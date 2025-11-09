@@ -4,14 +4,8 @@
 
 namespace Resonance
 {
-    SineCard::SineCard()
-        : Card(CardType::Waveform)
-    {
-
-    }
-
     SineCard::SineCard(int position)
-        : Card(CardType::Waveform, position)
+        : Card(CardType::Sine, position)
     {
 
     }

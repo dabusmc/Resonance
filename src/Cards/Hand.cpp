@@ -1,13 +1,35 @@
 #include "Hand.h"
 
-#include "SineCard.h"
-#include "EchoCard.h"
+#include <iostream>
+
+#include "Types/SineCard.h"
+#include "Types/EchoCard.h"
 
 #include "raylib.h"
+#include "Types/LowFrequencyCard.h"
+#include "Types/PhaseCard.h"
+#include "Utility/Random.h"
 
 namespace Resonance
 {
     const int c_SelectionLimit = 3;
+
+    static Card* ConstructCardFromType(CardType type, int position)
+    {
+        switch (type)
+        {
+            case CardType::Sine:
+                return new SineCard(position);
+            case CardType::Phase:
+                return new PhaseCard(position);
+            case CardType::Echo:
+                return new EchoCard(position);
+            case CardType::LowFrequency:
+                return new LowFrequencyCard(position);
+            default:
+                return new SineCard(position);
+        }
+    }
 
     Hand::Hand()
     {
@@ -16,14 +38,39 @@ namespace Resonance
 
     Hand::~Hand()
     {
+        for (auto card : m_Hand)
+        {
+            delete card;
+        }
     }
 
     void Hand::Construct(Deck& deck)
     {
+        int waveformIndex = Random::Range(0, 4);
+
         for (int i = 0; i < 5; i++)
         {
-            m_Hand[i] = deck.DrawCard();
-            m_Hand[i]->SetPosition(i);
+            delete m_Hand[i];
+
+            CardType type;
+            if (i == waveformIndex)
+            {
+                type = deck.DrawWaveformCard();
+            }
+            else
+            {
+                type = deck.DrawCard();
+            }
+
+            if (type == CardType::None)
+            {
+                m_Hand[i] = nullptr;
+                std::cout << "Out of cards" << std::endl;
+            }
+            else
+            {
+                m_Hand[i] = ConstructCardFromType(type, i);
+            }
         }
     }
 
@@ -82,7 +129,7 @@ namespace Resonance
         {
             for (auto& i : m_Selected)
             {
-                if (m_Hand[i]->GetType() == CardType::Waveform)
+                if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
                 {
                     return true;
                 }

@@ -2,16 +2,27 @@
 
 namespace Resonance
 {
-    Card::Card(CardType type)
-        : m_Type(type)
+    CardCategory Card::GetCategoryFromType(CardType type)
     {
-        m_Position = -1;
+        switch (type)
+        {
+            case CardType::Sine:
+                return CardCategory::Waveform;
+            case CardType::Echo:
+                return CardCategory::Amplitude;
+            case CardType::LowFrequency:
+                return CardCategory::Frequency;
+            case CardType::Phase:
+                return CardCategory::Utility;
+            default:
+                return CardCategory::Waveform;
+        }
     }
 
     Card::Card(CardType type, int position)
         : m_Type(type), m_Position(position), m_Hovered(false)
     {
-
+        m_Category = GetCategoryFromType(type);
     }
 
     void Card::SetPosition(int position)
