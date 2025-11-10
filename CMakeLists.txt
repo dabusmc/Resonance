@@ -39,7 +39,8 @@ set(SOURCE src/main.cpp
         src/Cards/Base/WaveformCard.cpp
         src/Cards/Base/AmplitudeCard.cpp
         src/Cards/Base/FrequencyCard.cpp
-        src/Cards/Base/UtilityCard.cpp)
+        src/Cards/Base/UtilityCard.cpp
+        src/Scene/GameScene.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 target_link_libraries(${PROJECT_NAME} raylib)

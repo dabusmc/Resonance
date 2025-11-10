@@ -46,6 +46,14 @@ namespace Resonance
         ClearHand();
     }
 
+    void Hand::Reset()
+    {
+        ClearSelection();
+        ClearHand();
+        m_AttackRunning = false;
+        m_Lost = false;
+    }
+
     bool Hand::NextHand(Deck &deck)
     {
         if (m_Lost)
@@ -129,6 +137,7 @@ namespace Resonance
         {
             card.reset();
         }
+        m_HandHasWaveformCard = false;
     }
 
     void Hand::Update()

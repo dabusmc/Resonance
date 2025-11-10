@@ -16,6 +16,8 @@ namespace Resonance
         Hand();
         ~Hand();
 
+        void Reset();
+
         bool NextHand(Deck& deck);
         void Construct(Deck& deck);
 

@@ -12,15 +12,25 @@ namespace Resonance
         return ret;
     }
 
-    Button::Button(const ButtonProps &props)
-        : m_Props(props)
+    Button::Button()
     {
+        m_Enabled = true;
+    }
+
+    Button::Button(const ButtonProps &props)
+    {
+        SetProps(props);
         m_Enabled = true;
     }
 
     Button::~Button()
     {
 
+    }
+
+    void Button::SetProps(const ButtonProps& props)
+    {
+        m_Props = props;
     }
 
     void Button::Update()

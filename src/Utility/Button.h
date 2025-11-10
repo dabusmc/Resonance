@@ -24,8 +24,11 @@ namespace Resonance
     class Button
     {
     public:
+        Button();
         Button(const ButtonProps& props);
         ~Button();
+
+        void SetProps(const ButtonProps& props);
 
         void Update();
         void Draw();
