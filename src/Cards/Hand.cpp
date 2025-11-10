@@ -48,12 +48,11 @@ namespace Resonance
 
     bool Hand::NextHand(Deck &deck)
     {
-        std::cout << "Begin NextHand()" << std::endl;
+        if (m_Lost)
+            return true;
 
         if (m_AttackRunning)
         {
-            std::cout << "Attack is currently running. Deferring to next frame" << std::endl;
-            std::cout << "End NextHand()" << std::endl;
             return false;
         }
 
@@ -73,14 +72,13 @@ namespace Resonance
         ClearHand();
         Construct(deck);
 
-        std::cout << "End NextHand()" << std::endl;
-
         return true;
     }
 
     void Hand::Construct(Deck& deck)
     {
-        std::cout << "Begin Construct()" << std::endl;
+        if (m_Lost)
+            return;
 
         m_WaveformCardSelected = false;
         m_HandHasWaveformCard = false;
@@ -113,34 +111,24 @@ namespace Resonance
                 }
             }
         }
-
-        std::cout << "End Construct()" << std::endl;
     }
 
     void Hand::ClearSelection()
     {
-        std::cout << "Begin ClearSelection()" << std::endl;
-
         for (auto& card : m_Hand)
         {
             if (card) card->SetSelected(false);
         }
         m_WaveformCardSelected = false;
         m_Selected.clear();
-
-        std::cout << "End ClearSelection()" << std::endl;
     }
 
     void Hand::ClearHand()
     {
-        std::cout << "Begin ClearHand()" << std::endl;
-
         for (auto& card : m_Hand)
         {
             card.reset();
         }
-
-        std::cout << "End ClearHand()" << std::endl;
     }
 
     void Hand::Update()
@@ -207,102 +195,52 @@ namespace Resonance
 
     bool Hand::CanAttack()
     {
-        if (m_Selected.size() == 3)
-        {
-            for (auto i : m_Selected)
-            {
-                if (i < 0 || i >= 5) continue;            // bounds check
-                if (!m_Hand[i]) continue;                 // null check
-                if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return false;
+        return m_WaveformCardSelected;
     }
 
     void Hand::Attack(Enemy& enemy)
     {
         m_AttackRunning = true;
 
-        std::cout << "Attack Called (current state)" << std::endl;
-        std::cout << "\tm_WaveformCardSelected = " << m_WaveformCardSelected << std::endl;
-        std::cout << "\tm_Selected.size() = " << m_Selected.size() << std::endl;
-        std::cout << "\tm_Selected = {" << std::endl;
-        for (int i = 0; i < m_Selected.size(); i++)
-        {
-            std::cout << "\t\t" << m_Selected[i] << std::endl;
-        }
-        std::cout << "\t}" << std::endl;
-        std::cout << "\tm_Hand = {" << std::endl;
-        for (int i = 0; i < 5; i++)
-        {
-            std::cout << "\t\t" << m_Hand[i].get() << std::endl;
-        }
-        std::cout << "\t}" << std::endl;
-
         if (m_Selected.empty()) return;
-        std::cout << "m_Selected Not Empty" << std::endl;
 
         int damageAmount = 0;
         bool ignoreArmor = false;
 
         std::vector<Card*> selectedCards;
-        std::cout << "Creating selected cards" << std::endl;
         for (int idx : m_Selected)
         {
-            if (idx < 0 || idx >= 5)
-            {
-                std::cout << "\tInvalid Index: " << idx << std::endl;
-                continue;
-            }
-
-            if (!m_Hand[idx])
-            {
-                std::cout << "\tm_Hand[" << idx << "] = nullptr" << std::endl;
-                continue;
-            }
+            if (idx < 0 || idx >= 5) continue;
+            if (!m_Hand[idx]) continue;
 
             selectedCards.push_back(m_Hand[idx].get());
         }
-        std::cout << "Created selected cards" << std::endl;
 
         int i = 0;
         for (Card* card : selectedCards)
         {
-            std::cout << "Data for Card[" << i << "]" << std::endl;
             switch (card->GetCategory())
             {
                 case CardCategory::Waveform:
                 {
-                    std::cout << "\tCard Category is Waveform" << std::endl;
                     if (auto* waveform = dynamic_cast<WaveformCard*>(card))
                     {
-                        std::cout << "\tCard has " << waveform->GetBaseDamage() << " base damage" << std::endl;
                         damageAmount += waveform->GetBaseDamage();
                     }
                     break;
                 }
                 case CardCategory::Amplitude:
                 {
-                    std::cout << "\tCard Category is Amplitude" << std::endl;
                     break;
                 }
                 case CardCategory::Frequency:
                 {
-                    std::cout << "\tCard Category is Frequency" << std::endl;
                     break;
                 }
                 case CardCategory::Utility:
                 {
-                    std::cout << "\tCard Category is Utility" << std::endl;
                     if (card->GetCardType() == CardType::Phase)
                     {
-                        std::cout << "\tCard is a Phase Card" << std::endl;
                         ignoreArmor = true;
                     }
 
@@ -316,14 +254,10 @@ namespace Resonance
         std::cout << "Damage Amount: " << damageAmount << std::endl;
         std::cout << "Ignore Armor: " << ignoreArmor << std::endl;
 
-        std::cout << "Calling damage" << std::endl;
         enemy.Damage(damageAmount, ignoreArmor);
-        std::cout << "Called damage" << std::endl;
 
         std::cout << "Enemy Health: " << enemy.GetHealth() << std::endl;
         std::cout << "Enemy Armor: " << enemy.GetArmor() << std::endl;
-
-        std::cout << std::endl;
 
         m_AttackRunning = false;
     }
