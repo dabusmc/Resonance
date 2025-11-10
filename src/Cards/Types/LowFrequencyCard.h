@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Cards/Card.h"
+#include "Cards/Base/FrequencyCard.h"
 
 namespace Resonance
 {
-	class LowFrequencyCard : public Card
+	class LowFrequencyCard : public FrequencyCard
 	{
 	public:
 		LowFrequencyCard(int position);

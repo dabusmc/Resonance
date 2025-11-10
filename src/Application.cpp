@@ -42,6 +42,8 @@ namespace Resonance
         Hand hand;
         hand.Construct(deck);
 
+        TestEnemy testEnemy;
+
         ButtonProps attackProps;
         attackProps.Text = "Attack";
         attackProps.PosX = 1050;
@@ -51,12 +53,11 @@ namespace Resonance
         Button attackButton(attackProps);
         attackButton.Disable();
 
-        attackButton.SetOnClick([]()
+        attackButton.SetOnClick([&]()
         {
-            std::cout << "Attack!!!!!" << std::endl;
+            hand.Attack(testEnemy);
+            hand.NextHand(deck);
         });
-
-        TestEnemy testEnemy;
 
         while (!WindowShouldClose())
         {

@@ -5,7 +5,7 @@
 namespace Resonance
 {
 	TestEnemy::TestEnemy()
-		: Enemy()
+		: Enemy(100, 10)
 	{
 
 	}

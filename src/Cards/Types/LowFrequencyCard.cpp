@@ -5,7 +5,7 @@
 namespace Resonance
 {
 	LowFrequencyCard::LowFrequencyCard(int position)
-		: Card(CardType::LowFrequency, position)
+		: FrequencyCard(CardType::LowFrequency, position)
 	{
 	}
 

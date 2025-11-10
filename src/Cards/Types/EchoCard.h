@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Cards/Card.h"
+#include "Cards/Base/AmplitudeCard.h"
 
 namespace Resonance
 {
-	class EchoCard : public Card
+	class EchoCard : public AmplitudeCard
 	{
 	public:
 		EchoCard(int position);

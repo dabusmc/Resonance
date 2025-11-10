@@ -5,7 +5,7 @@
 namespace Resonance
 {
 	EchoCard::EchoCard(int position)
-		: Card(CardType::Echo, position)
+		: AmplitudeCard(CardType::Echo, position)
 	{
 	}
 

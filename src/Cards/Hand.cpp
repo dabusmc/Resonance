@@ -38,19 +38,29 @@ namespace Resonance
 
     Hand::~Hand()
     {
-        for (auto card : m_Hand)
+        ClearHand();
+    }
+
+    void Hand::NextHand(Deck &deck)
+    {
+        if (deck.CardsRemaining() == 0)
         {
-            delete card;
+            std::cout << "Out of Cards! YOU LOSE!!!!" << std::endl;
         }
+
+        ClearSelection();
+        ClearHand();
+        Construct(deck);
     }
 
     void Hand::Construct(Deck& deck)
     {
+        m_WaveformCardSelected = false;
         int waveformIndex = Random::Range(0, 4);
 
         for (int i = 0; i < 5; i++)
         {
-            delete m_Hand[i];
+            m_Hand[i] = nullptr;
 
             CardType type;
             if (i == waveformIndex)
@@ -65,12 +75,31 @@ namespace Resonance
             if (type == CardType::None)
             {
                 m_Hand[i] = nullptr;
-                std::cout << "Out of cards" << std::endl;
             }
             else
             {
                 m_Hand[i] = ConstructCardFromType(type, i);
             }
+        }
+    }
+
+    void Hand::ClearSelection()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (!m_Hand[i]) continue;
+            m_Hand[i]->SetSelected(false);
+        }
+        m_WaveformCardSelected = false;
+        m_Selected.clear();
+    }
+
+    void Hand::ClearHand()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            delete m_Hand[i];
+            m_Hand[i] = nullptr;
         }
     }
 
@@ -83,6 +112,8 @@ namespace Resonance
 
         for (int i = 0; i < 5; i++)
         {
+            if (!m_Hand[i]) continue;
+
             if (hoveredFound != -1)
             {
                 m_Hand[i]->SetHovered(false);
@@ -100,6 +131,16 @@ namespace Resonance
         {
             if (hoveredFound != -1 && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
+                if (m_Hand[hoveredFound]->GetCategory() == CardCategory::Waveform)
+                {
+                    if (m_WaveformCardSelected)
+                    {
+                        std::cout << "You can only select one waveform card" << std::endl;
+                        return;
+                    }
+
+                    m_WaveformCardSelected = true;
+                }
                 m_Hand[hoveredFound]->SetSelected(true);
                 m_Selected.push_back(hoveredFound);
             }
@@ -107,11 +148,7 @@ namespace Resonance
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
         {
-            for (int i = 0; i < 5; i++)
-            {
-                m_Hand[i]->SetSelected(false);
-            }
-            m_Selected.clear();
+            ClearSelection();
         }
     }
 
@@ -119,6 +156,7 @@ namespace Resonance
     {
         for (int i = 0; i < 5; i++)
         {
+            if (!m_Hand[i]) continue;
             m_Hand[i]->Draw();
         }
     }
@@ -139,5 +177,46 @@ namespace Resonance
         }
 
         return false;
+    }
+
+    void Hand::Attack(Enemy& enemy)
+    {
+        int damageAmount = 0;
+
+        for (int i = 0; i < m_Selected.size(); i++)
+        {
+            int index = m_Selected[i];
+            Card* card = m_Hand[index];
+
+            switch (card->GetCategory())
+            {
+                case CardCategory::Waveform:
+                {
+                    auto* waveform = dynamic_cast<WaveformCard*>(card);
+                    damageAmount += waveform->GetBaseDamage();
+                    break;
+                }
+                case CardCategory::Amplitude:
+                {
+                    auto* amplitude = dynamic_cast<AmplitudeCard*>(card);
+                    break;
+                }
+                case CardCategory::Frequency:
+                {
+                    auto* frequency = dynamic_cast<FrequencyCard*>(card);
+                    break;
+                }
+                case CardCategory::Utility:
+                {
+                    auto* utility = dynamic_cast<UtilityCard*>(card);
+                    break;
+                }
+            }
+        }
+
+        enemy.Damage(damageAmount, false);
+
+        std::cout << enemy.GetHealth() << std::endl;
+        std::cout << enemy.GetArmor() << std::endl;
     }
 }

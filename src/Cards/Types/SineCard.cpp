@@ -5,9 +5,9 @@
 namespace Resonance
 {
     SineCard::SineCard(int position)
-        : Card(CardType::Sine, position)
+        : WaveformCard(CardType::Sine, position)
     {
-
+        m_BaseDamage = 10;
     }
 
     void SineCard::Draw()

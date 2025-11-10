@@ -5,7 +5,7 @@
 namespace Resonance
 {
 	PhaseCard::PhaseCard(int position)
-		: Card(CardType::Phase, position)
+		: UtilityCard(CardType::Phase, position)
 	{
 	}
 

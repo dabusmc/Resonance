@@ -35,7 +35,11 @@ set(SOURCE src/main.cpp
         src/Cards/Types/PhaseCard.cpp
         src/Cards/Types/LowFrequencyCard.cpp
         src/Enemies/Enemy.cpp
-        src/Enemies/TestEnemy.cpp)
+        src/Enemies/TestEnemy.cpp
+        src/Cards/Base/WaveformCard.cpp
+        src/Cards/Base/AmplitudeCard.cpp
+        src/Cards/Base/FrequencyCard.cpp
+        src/Cards/Base/UtilityCard.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 target_link_libraries(${PROJECT_NAME} raylib)
