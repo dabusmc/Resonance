@@ -41,6 +41,7 @@ namespace Resonance
 
         Hand hand;
         hand.Construct(deck);
+        bool requestNextHand = false;
 
         TestEnemy testEnemy;
 
@@ -56,12 +57,17 @@ namespace Resonance
         attackButton.SetOnClick([&]()
         {
             hand.Attack(testEnemy);
-            hand.NextHand(deck);
+            requestNextHand = true;
         });
 
         while (!WindowShouldClose())
         {
             hand.Update();
+
+            if (requestNextHand)
+            {
+                requestNextHand = !hand.NextHand(deck);
+            }
 
             if (hand.CanAttack())
             {

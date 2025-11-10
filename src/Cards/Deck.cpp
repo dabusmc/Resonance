@@ -75,6 +75,20 @@ namespace Resonance
 		return m_Deck[index];
 	}
 
+	int Deck::WaveformCardsRemaining()
+	{
+		int remainingCards = 0;
+		for (size_t idx : m_WaveformCards)
+		{
+			if (std::find(m_SkipCards.begin(), m_SkipCards.end(), idx) == m_SkipCards.end())
+			{
+				remainingCards += 1;
+			}
+		}
+
+		return remainingCards;
+	}
+
 	size_t Deck::AddCard(CardType type)
 	{
 		m_Deck.push_back(type);

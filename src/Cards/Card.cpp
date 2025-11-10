@@ -20,7 +20,7 @@ namespace Resonance
     }
 
     Card::Card(CardType type, int position)
-        : m_Type(type), m_Position(position), m_Hovered(false)
+        : m_Type(type), m_Position(position), m_Hovered(false), m_Selected(false)
     {
         m_Category = GetCategoryFromType(type);
     }

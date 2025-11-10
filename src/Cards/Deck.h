@@ -18,6 +18,7 @@ namespace Resonance
 		CardType DrawWaveformCard();
 		CardType DrawCard();
 
+		int WaveformCardsRemaining();
 		int CardsRemaining() { return m_Deck.size() - m_SkipCards.size(); }
 
 		void Reset();

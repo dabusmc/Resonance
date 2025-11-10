@@ -2,6 +2,7 @@
 
 #include <array>
 #include <vector>
+#include <memory>
 
 #include "Card.h"
 #include "Deck.h"
@@ -15,7 +16,7 @@ namespace Resonance
         Hand();
         ~Hand();
 
-        void NextHand(Deck& deck);
+        bool NextHand(Deck& deck);
         void Construct(Deck& deck);
 
         void ClearSelection();
@@ -29,8 +30,14 @@ namespace Resonance
         void Attack(Enemy& enemy);
 
     private:
-        std::array<Card*, 5> m_Hand;
+        std::array<std::unique_ptr<Card>, 5> m_Hand;
         std::vector<int> m_Selected;
+
+        bool m_HandHasWaveformCard;
         bool m_WaveformCardSelected;
+
+        bool m_Lost;
+
+        bool m_AttackRunning;
     };
 }

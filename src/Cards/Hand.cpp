@@ -33,7 +33,12 @@ namespace Resonance
 
     Hand::Hand()
     {
-        m_Hand = std::array<Card*, 5>();
+        for (auto& card : m_Hand)
+        {
+            card.reset();
+        }
+
+        m_AttackRunning = false;
     }
 
     Hand::~Hand()
@@ -41,70 +46,108 @@ namespace Resonance
         ClearHand();
     }
 
-    void Hand::NextHand(Deck &deck)
+    bool Hand::NextHand(Deck &deck)
     {
+        std::cout << "Begin NextHand()" << std::endl;
+
+        if (m_AttackRunning)
+        {
+            std::cout << "Attack is currently running. Deferring to next frame" << std::endl;
+            std::cout << "End NextHand()" << std::endl;
+            return false;
+        }
+
         if (deck.CardsRemaining() == 0)
         {
             std::cout << "Out of Cards! YOU LOSE!!!!" << std::endl;
+            m_Lost = true;
+        }
+
+        if (deck.WaveformCardsRemaining() == 0)
+        {
+            std::cout << "No more waveform cards! YOU LOSE!!!!" << std::endl;
+            m_Lost = true;
         }
 
         ClearSelection();
         ClearHand();
         Construct(deck);
+
+        std::cout << "End NextHand()" << std::endl;
+
+        return true;
     }
 
     void Hand::Construct(Deck& deck)
     {
+        std::cout << "Begin Construct()" << std::endl;
+
         m_WaveformCardSelected = false;
+        m_HandHasWaveformCard = false;
         int waveformIndex = Random::Range(0, 4);
 
         for (int i = 0; i < 5; i++)
         {
-            m_Hand[i] = nullptr;
+            CardType type = (i == waveformIndex) ? deck.DrawWaveformCard() : deck.DrawCard();
 
-            CardType type;
-            if (i == waveformIndex)
+            if (deck.WaveformCardsRemaining() == 0)
             {
-                type = deck.DrawWaveformCard();
-            }
-            else
-            {
-                type = deck.DrawCard();
+                if (!m_HandHasWaveformCard)
+                {
+                    std::cout << "No more waveform cards! YOU LOSE!!!!" << std::endl;
+                    m_Lost = true;
+                    return;
+                }
             }
 
             if (type == CardType::None)
             {
-                m_Hand[i] = nullptr;
+                m_Hand[i].reset();
             }
             else
             {
-                m_Hand[i] = ConstructCardFromType(type, i);
+                m_Hand[i] = std::unique_ptr<Card>(ConstructCardFromType(type, i));
+                if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
+                {
+                    m_HandHasWaveformCard = true;
+                }
             }
         }
+
+        std::cout << "End Construct()" << std::endl;
     }
 
     void Hand::ClearSelection()
     {
-        for (int i = 0; i < 5; i++)
+        std::cout << "Begin ClearSelection()" << std::endl;
+
+        for (auto& card : m_Hand)
         {
-            if (!m_Hand[i]) continue;
-            m_Hand[i]->SetSelected(false);
+            if (card) card->SetSelected(false);
         }
         m_WaveformCardSelected = false;
         m_Selected.clear();
+
+        std::cout << "End ClearSelection()" << std::endl;
     }
 
     void Hand::ClearHand()
     {
-        for (int i = 0; i < 5; i++)
+        std::cout << "Begin ClearHand()" << std::endl;
+
+        for (auto& card : m_Hand)
         {
-            delete m_Hand[i];
-            m_Hand[i] = nullptr;
+            card.reset();
         }
+
+        std::cout << "End ClearHand()" << std::endl;
     }
 
     void Hand::Update()
     {
+        if (m_Lost)
+            return;
+
         int mouseX = GetMouseX();
         int mouseY = GetMouseY();
 
@@ -131,6 +174,8 @@ namespace Resonance
         {
             if (hoveredFound != -1 && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
+                if (!m_Hand[hoveredFound]) return;
+
                 if (m_Hand[hoveredFound]->GetCategory() == CardCategory::Waveform)
                 {
                     if (m_WaveformCardSelected)
@@ -154,10 +199,9 @@ namespace Resonance
 
     void Hand::Draw()
     {
-        for (int i = 0; i < 5; i++)
+        for (auto& card : m_Hand)
         {
-            if (!m_Hand[i]) continue;
-            m_Hand[i]->Draw();
+            if (card && !m_Lost) card->Draw();
         }
     }
 
@@ -165,8 +209,10 @@ namespace Resonance
     {
         if (m_Selected.size() == 3)
         {
-            for (auto& i : m_Selected)
+            for (auto i : m_Selected)
             {
+                if (i < 0 || i >= 5) continue;            // bounds check
+                if (!m_Hand[i]) continue;                 // null check
                 if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
                 {
                     return true;
@@ -181,42 +227,104 @@ namespace Resonance
 
     void Hand::Attack(Enemy& enemy)
     {
-        int damageAmount = 0;
+        m_AttackRunning = true;
 
+        std::cout << "Attack Called (current state)" << std::endl;
+        std::cout << "\tm_WaveformCardSelected = " << m_WaveformCardSelected << std::endl;
+        std::cout << "\tm_Selected.size() = " << m_Selected.size() << std::endl;
+        std::cout << "\tm_Selected = {" << std::endl;
         for (int i = 0; i < m_Selected.size(); i++)
         {
-            int index = m_Selected[i];
-            Card* card = m_Hand[index];
+            std::cout << "\t\t" << m_Selected[i] << std::endl;
+        }
+        std::cout << "\t}" << std::endl;
+        std::cout << "\tm_Hand = {" << std::endl;
+        for (int i = 0; i < 5; i++)
+        {
+            std::cout << "\t\t" << m_Hand[i].get() << std::endl;
+        }
+        std::cout << "\t}" << std::endl;
 
+        if (m_Selected.empty()) return;
+        std::cout << "m_Selected Not Empty" << std::endl;
+
+        int damageAmount = 0;
+        bool ignoreArmor = false;
+
+        std::vector<Card*> selectedCards;
+        std::cout << "Creating selected cards" << std::endl;
+        for (int idx : m_Selected)
+        {
+            if (idx < 0 || idx >= 5)
+            {
+                std::cout << "\tInvalid Index: " << idx << std::endl;
+                continue;
+            }
+
+            if (!m_Hand[idx])
+            {
+                std::cout << "\tm_Hand[" << idx << "] = nullptr" << std::endl;
+                continue;
+            }
+
+            selectedCards.push_back(m_Hand[idx].get());
+        }
+        std::cout << "Created selected cards" << std::endl;
+
+        int i = 0;
+        for (Card* card : selectedCards)
+        {
+            std::cout << "Data for Card[" << i << "]" << std::endl;
             switch (card->GetCategory())
             {
                 case CardCategory::Waveform:
                 {
-                    auto* waveform = dynamic_cast<WaveformCard*>(card);
-                    damageAmount += waveform->GetBaseDamage();
+                    std::cout << "\tCard Category is Waveform" << std::endl;
+                    if (auto* waveform = dynamic_cast<WaveformCard*>(card))
+                    {
+                        std::cout << "\tCard has " << waveform->GetBaseDamage() << " base damage" << std::endl;
+                        damageAmount += waveform->GetBaseDamage();
+                    }
                     break;
                 }
                 case CardCategory::Amplitude:
                 {
-                    auto* amplitude = dynamic_cast<AmplitudeCard*>(card);
+                    std::cout << "\tCard Category is Amplitude" << std::endl;
                     break;
                 }
                 case CardCategory::Frequency:
                 {
-                    auto* frequency = dynamic_cast<FrequencyCard*>(card);
+                    std::cout << "\tCard Category is Frequency" << std::endl;
                     break;
                 }
                 case CardCategory::Utility:
                 {
-                    auto* utility = dynamic_cast<UtilityCard*>(card);
+                    std::cout << "\tCard Category is Utility" << std::endl;
+                    if (card->GetCardType() == CardType::Phase)
+                    {
+                        std::cout << "\tCard is a Phase Card" << std::endl;
+                        ignoreArmor = true;
+                    }
+
                     break;
                 }
             }
+
+            i += 1;
         }
 
-        enemy.Damage(damageAmount, false);
+        std::cout << "Damage Amount: " << damageAmount << std::endl;
+        std::cout << "Ignore Armor: " << ignoreArmor << std::endl;
 
-        std::cout << enemy.GetHealth() << std::endl;
-        std::cout << enemy.GetArmor() << std::endl;
+        std::cout << "Calling damage" << std::endl;
+        enemy.Damage(damageAmount, ignoreArmor);
+        std::cout << "Called damage" << std::endl;
+
+        std::cout << "Enemy Health: " << enemy.GetHealth() << std::endl;
+        std::cout << "Enemy Armor: " << enemy.GetArmor() << std::endl;
+
+        std::cout << std::endl;
+
+        m_AttackRunning = false;
     }
 }
