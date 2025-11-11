@@ -43,6 +43,7 @@ namespace Resonance
 
         void SetBackgroundColor(Color color) { m_Background = color; }
         void SetBorderColor(Color color) { m_Border = color; }
+        void SetPrimaryColor(Color color) { m_PrimaryColor = color;}
 
         void SetSelected(bool selected);
 
@@ -62,5 +63,6 @@ namespace Resonance
 
         Color m_Background;
         Color m_Border;
+        Color m_PrimaryColor;
     };
 }

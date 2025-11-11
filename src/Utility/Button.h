@@ -30,6 +30,9 @@ namespace Resonance
 
         void SetProps(const ButtonProps& props);
 
+        void SetBackgroundColor(Color color) { m_Props.Background = color; }
+        void SetForegroundColor(Color color) { m_Props.Foreground = color; }
+
         void Update();
         void Draw();
 

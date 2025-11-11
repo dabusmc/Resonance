@@ -11,5 +11,7 @@ namespace Resonance
 		static Color GetColor2(ColorMode mode);
 		static Color GetColor3(ColorMode mode);
 		static Color GetColor4(ColorMode mode);
+		static Color GetColor5(ColorMode mode);
+		static Color GetColor6(ColorMode mode);
 	};
 }

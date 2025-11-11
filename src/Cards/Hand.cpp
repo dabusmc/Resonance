@@ -149,8 +149,9 @@ namespace Resonance
             else
             {
                 m_Hand[i] = std::unique_ptr<Card>(ConstructCardFromType(type, i));
-                m_Hand[i]->SetBorderColor(CardColors::GetColor2(mode));
-                m_Hand[i]->SetBackgroundColor(CardColors::GetColor1(mode));
+                m_Hand[i]->SetBackgroundColor(CardColors::GetColor2(mode));
+                m_Hand[i]->SetBorderColor(CardColors::GetColor3(mode));
+                m_Hand[i]->SetPrimaryColor(CardColors::GetColor5(mode));
                 if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
                 {
                     m_HandHasWaveformCard = true;
@@ -260,8 +261,9 @@ namespace Resonance
         {
             if (card && !m_Lost)
             {
-                card->SetBackgroundColor(CardColors::GetColor1(mode));
-                card->SetBorderColor(CardColors::GetColor2(mode));
+                card->SetBackgroundColor(CardColors::GetColor2(mode));
+                card->SetBorderColor(CardColors::GetColor3(mode));
+                card->SetPrimaryColor(CardColors::GetColor5(mode));
             }
         }
     }

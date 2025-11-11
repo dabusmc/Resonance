@@ -57,4 +57,32 @@ namespace Resonance
 		}
 		return WHITE;
 	}
+
+	Color CardColors::GetColor5(ColorMode mode)
+	{
+		switch (mode)
+		{
+			case ColorMode::Low:
+				return c_LowColor5;
+			case ColorMode::Mid:
+				return c_MidColor5;
+			case ColorMode::High:
+				return c_HighColor5;
+		}
+		return WHITE;
+	}
+
+	Color CardColors::GetColor6(ColorMode mode)
+	{
+		switch (mode)
+		{
+			case ColorMode::Low:
+				return c_LowColor6;
+			case ColorMode::Mid:
+				return c_MidColor6;
+			case ColorMode::High:
+				return c_HighColor6;
+		}
+		return WHITE;
+	}
 }

@@ -15,6 +15,6 @@ namespace Resonance
 		DrawRectangle(GetXPosition() + 5, GetYPosition() + 5, 80, 125, m_Background);
 
 		Texture2D texture = textures.GetTexture(CardTexture::Echo);
-		DrawTexture(texture, GetXPosition() + 5, GetYPosition() + 5, m_Border);
+		DrawTexture(texture, GetXPosition() + 5, GetYPosition() + 5, m_PrimaryColor);
 	}
 }

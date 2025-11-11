@@ -6,6 +6,8 @@
 
 #include "SceneSwitcher.h"
 
+#include "Graphics/CardColors.h"
+
 namespace Resonance
 {
 	GameScene::GameScene()
@@ -44,8 +46,12 @@ namespace Resonance
 		m_AttackButton.SetOnClick([&]()
 		{
 			m_ColorMode = m_Hand.Attack(m_Enemy);
-			m_Hand.SwapColorMode(m_ColorMode);
 			m_RequestNextHand = true;
+
+			m_Hand.SwapColorMode(m_ColorMode);
+
+			m_AttackButton.SetBackgroundColor(CardColors::GetColor3(m_ColorMode));
+			m_AttackButton.SetForegroundColor(CardColors::GetColor6(m_ColorMode));
 		});
 	}
 
@@ -75,7 +81,7 @@ namespace Resonance
 		}
 
 		BeginDrawing();
-			ClearBackground(BLACK);
+			ClearBackground(CardColors::GetColor1(m_ColorMode));
 			DrawFPS(12, 12);
 			m_Enemy.Draw();
 			m_Hand.Draw();
