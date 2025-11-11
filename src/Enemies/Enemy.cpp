@@ -10,23 +10,23 @@ namespace Resonance
 
 	}
 
-	void Enemy::Damage(int amount, bool ignoresArmor)
+	void Enemy::Damage(int amount, bool ignoresArmor, float armorModifier, float healthModifier)
 	{
 		if (ignoresArmor || m_Armor <= 0)
 		{
-			m_Health -= amount;
+			m_Health -= static_cast<int>(amount * healthModifier);
 		}
 		else
 		{
-			int leftover = amount - m_Armor;
-			m_Armor -= amount;
+			int armorDamage = static_cast<int>(amount * armorModifier);
+
+			int leftover = armorDamage - m_Armor;
+			m_Armor -= armorDamage;
 			m_Armor = std::max(m_Armor, 0);
 			if (leftover > 0)
 			{
-				m_Health -= leftover;
+				m_Health -= static_cast<int>(leftover * healthModifier);
 			}
 		}
 	}
-
-
 }

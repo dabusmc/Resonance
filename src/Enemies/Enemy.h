@@ -10,7 +10,7 @@ namespace Resonance
 
 		virtual void Draw() = 0;
 
-		void Damage(int amount, bool ignoresArmor);
+		void Damage(int amount, bool ignoresArmor, float armorModifier, float healthModifier);
 
 		int GetHealth() const { return m_Health; }
 		int GetArmor() const { return m_Armor; }

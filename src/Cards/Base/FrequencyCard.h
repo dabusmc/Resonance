@@ -8,5 +8,8 @@ namespace Resonance
 	{
 	public:
 		FrequencyCard(CardType type, int position);
+
+		virtual float GetArmorDamageModifier() = 0;
+		virtual float GetHealthDamageModifier() = 0;
 	};
 }

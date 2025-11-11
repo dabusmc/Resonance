@@ -9,6 +9,9 @@ namespace Resonance
 	public:
 		LowFrequencyCard(int position);
 
+		float GetArmorDamageModifier() override { return 2.0f; }
+		float GetHealthDamageModifier() override { return 0.5f; }
+
 		void Draw() override;
 	};
 }

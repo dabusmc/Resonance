@@ -258,6 +258,11 @@ namespace Resonance
         int damageAmount = 0;
         bool ignoreArmor = false;
 
+        float armorDamageModifier = 1.0f;
+        float healthDamageModifier = 1.0f;
+
+        bool repeatAttack = false;
+
         std::vector<Card*> selectedCards;
         for (int idx : m_Selected)
         {
@@ -282,10 +287,20 @@ namespace Resonance
                 }
                 case CardCategory::Amplitude:
                 {
+                    if (card->GetCardType() == CardType::Echo)
+                    {
+                        repeatAttack = true;
+                    }
+
                     break;
                 }
                 case CardCategory::Frequency:
                 {
+                    if (auto* frequency = dynamic_cast<FrequencyCard*>(card))
+                    {
+                        armorDamageModifier = frequency->GetArmorDamageModifier();
+                        healthDamageModifier = frequency->GetHealthDamageModifier();
+                    }
                     break;
                 }
                 case CardCategory::Utility:
@@ -304,11 +319,26 @@ namespace Resonance
 
         std::cout << "Damage Amount: " << damageAmount << std::endl;
         std::cout << "Ignore Armor: " << ignoreArmor << std::endl;
+        std::cout << "Armor Damage Modifier: " << armorDamageModifier << std::endl;
+        std::cout << "Health Damage Modifier: " << healthDamageModifier << std::endl;
 
-        enemy.Damage(damageAmount, ignoreArmor);
+        enemy.Damage(damageAmount, ignoreArmor, armorDamageModifier, healthDamageModifier);
 
         std::cout << "Enemy Health: " << enemy.GetHealth() << std::endl;
         std::cout << "Enemy Armor: " << enemy.GetArmor() << std::endl;
+
+        if (repeatAttack)
+        {
+            std::cout << "Damage Amount: " << damageAmount << std::endl;
+            std::cout << "Ignore Armor: " << ignoreArmor << std::endl;
+            std::cout << "Armor Damage Modifier: " << armorDamageModifier << std::endl;
+            std::cout << "Health Damage Modifier: " << healthDamageModifier << std::endl;
+
+            enemy.Damage(damageAmount, ignoreArmor, armorDamageModifier, healthDamageModifier);
+
+            std::cout << "Enemy Health: " << enemy.GetHealth() << std::endl;
+            std::cout << "Enemy Armor: " << enemy.GetArmor() << std::endl;
+        }
 
         m_AttackRunning = false;
     }
