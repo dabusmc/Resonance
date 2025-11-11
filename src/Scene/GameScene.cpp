@@ -38,12 +38,13 @@ namespace Resonance
 	void GameScene::Init()
 	{
 		m_Hand.Reset();
-		m_Hand.Construct(m_Deck);
+		m_Hand.Construct(m_Deck, m_ColorMode);
 		m_RequestNextHand = false;
 
 		m_AttackButton.SetOnClick([&]()
 		{
-			m_Hand.Attack(m_Enemy);
+			m_ColorMode = m_Hand.Attack(m_Enemy);
+			m_Hand.SwapColorMode(m_ColorMode);
 			m_RequestNextHand = true;
 		});
 	}
@@ -54,7 +55,7 @@ namespace Resonance
 
 		if (m_RequestNextHand)
 		{
-			m_RequestNextHand = !m_Hand.NextHand(m_Deck);
+			m_RequestNextHand = !m_Hand.NextHand(m_Deck, m_ColorMode);
 		}
 
 		if (m_Hand.CanAttack())

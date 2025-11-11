@@ -9,6 +9,8 @@
 
 #include "Utility/Button.h"
 
+#include "Graphics/Colors.h"
+
 namespace Resonance
 {
 	class GameScene : public Scene
@@ -24,11 +26,12 @@ namespace Resonance
 	private:
 		Deck m_Deck;
 		Hand m_Hand;
+		bool m_RequestNextHand;
 
 		TestEnemy m_Enemy;
 
 		Button m_AttackButton;
 
-		bool m_RequestNextHand;
+		ColorMode m_ColorMode;
 	};
 }

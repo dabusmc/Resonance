@@ -6,6 +6,7 @@
 #include "Types/EchoCard.h"
 
 #include "raylib.h"
+#include "Graphics/CardColors.h"
 #include "Types/HighFrequencyCard.h"
 #include "Types/LowFrequencyCard.h"
 #include "Types/PhaseCard.h"
@@ -60,7 +61,7 @@ namespace Resonance
         m_Lost = false;
     }
 
-    bool Hand::NextHand(Deck &deck)
+    bool Hand::NextHand(Deck& deck, ColorMode mode)
     {
         if (m_Lost)
             return true;
@@ -84,12 +85,12 @@ namespace Resonance
 
         ClearSelectedCardsFromHand();
         ClearSelection();
-        Construct(deck);
+        Construct(deck, mode);
 
         return true;
     }
 
-    void Hand::Construct(Deck& deck)
+    void Hand::Construct(Deck& deck, ColorMode mode)
     {
         if (m_Lost)
             return;
@@ -148,8 +149,8 @@ namespace Resonance
             else
             {
                 m_Hand[i] = std::unique_ptr<Card>(ConstructCardFromType(type, i));
-                m_Hand[i]->SetBorderColor(WHITE);
-                m_Hand[i]->SetBackgroundColor(BLACK);
+                m_Hand[i]->SetBorderColor(CardColors::GetColor2(mode));
+                m_Hand[i]->SetBackgroundColor(CardColors::GetColor1(mode));
                 if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
                 {
                     m_HandHasWaveformCard = true;
@@ -253,16 +254,28 @@ namespace Resonance
         }
     }
 
+    void Hand::SwapColorMode(ColorMode mode)
+    {
+        for (auto& card : m_Hand)
+        {
+            if (card && !m_Lost)
+            {
+                card->SetBackgroundColor(CardColors::GetColor1(mode));
+                card->SetBorderColor(CardColors::GetColor2(mode));
+            }
+        }
+    }
+
     bool Hand::CanAttack()
     {
         return m_WaveformCardSelected;
     }
 
-    void Hand::Attack(Enemy& enemy)
+    ColorMode Hand::Attack(Enemy& enemy)
     {
         m_AttackRunning = true;
 
-        if (m_Selected.empty()) return;
+        if (m_Selected.empty()) return ColorMode::Mid;
 
         int damageAmount = 0;
         bool ignoreArmor = false;
@@ -271,6 +284,8 @@ namespace Resonance
         float healthDamageModifier = 1.0f;
 
         bool repeatAttack = false;
+
+        ColorMode modeRet = ColorMode::Mid;
 
         std::vector<Card*> selectedCards;
         for (int idx : m_Selected)
@@ -309,6 +324,15 @@ namespace Resonance
                     {
                         armorDamageModifier *= frequency->GetArmorDamageModifier();
                         healthDamageModifier *= frequency->GetHealthDamageModifier();
+
+                        if (frequency->GetCardType() == CardType::LowFrequency)
+                        {
+                            modeRet = ColorMode::Low;
+                        }
+                        else if (frequency->GetCardType() == CardType::HighFrequency)
+                        {
+                            modeRet = ColorMode::High;
+                        }
                     }
                     break;
                 }
@@ -350,5 +374,7 @@ namespace Resonance
         }
 
         m_AttackRunning = false;
+
+        return modeRet;
     }
 }

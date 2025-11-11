@@ -46,7 +46,8 @@ set(SOURCE src/main.cpp
         src/Utility/Files.cpp
         src/Cards/CardTextures.cpp
         src/Cards/Types/SquareCard.cpp
-        src/Cards/Types/HighFrequencyCard.cpp)
+        src/Cards/Types/HighFrequencyCard.cpp
+        src/Graphics/CardColors.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 target_link_libraries(${PROJECT_NAME} raylib)

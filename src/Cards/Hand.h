@@ -6,7 +6,10 @@
 
 #include "Card.h"
 #include "Deck.h"
+
 #include "Enemies/Enemy.h"
+
+#include "Graphics/Colors.h"
 
 namespace Resonance
 {
@@ -18,8 +21,8 @@ namespace Resonance
 
         void Reset();
 
-        bool NextHand(Deck& deck);
-        void Construct(Deck& deck);
+        bool NextHand(Deck& deck, ColorMode mode);
+        void Construct(Deck& deck, ColorMode mode);
 
         void ClearSelection();
         void ClearSelectedCardsFromHand();
@@ -28,11 +31,12 @@ namespace Resonance
         void Update();
 
         void Draw();
+        void SwapColorMode(ColorMode mode);
 
         bool HasLost() { return m_Lost; }
 
         bool CanAttack();
-        void Attack(Enemy& enemy);
+        ColorMode Attack(Enemy& enemy);
 
     private:
         std::array<std::unique_ptr<Card>, 5> m_Hand;
