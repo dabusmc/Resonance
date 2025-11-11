@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Scene/SceneSwitcher.h"
+
 namespace Resonance
 {
     class Application
@@ -9,5 +11,8 @@ namespace Resonance
         ~Application();
 
         void Run();
+
+    private:
+        SceneSwitcher m_Switcher;
     };
 }

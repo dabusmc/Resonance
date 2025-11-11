@@ -29,6 +29,8 @@ namespace Resonance
 
         void Draw();
 
+        bool HasLost() { return m_Lost; }
+
         bool CanAttack();
         void Attack(Enemy& enemy);
 

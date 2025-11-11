@@ -40,7 +40,9 @@ set(SOURCE src/main.cpp
         src/Cards/Base/AmplitudeCard.cpp
         src/Cards/Base/FrequencyCard.cpp
         src/Cards/Base/UtilityCard.cpp
-        src/Scene/GameScene.cpp)
+        src/Scene/GameScene.cpp
+        src/Scene/LoseScene.cpp
+        src/Scene/SceneSwitcher.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 target_link_libraries(${PROJECT_NAME} raylib)

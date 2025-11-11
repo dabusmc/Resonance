@@ -4,6 +4,8 @@
 
 #include "raylib.h"
 
+#include "SceneSwitcher.h"
+
 namespace Resonance
 {
 	GameScene::GameScene()
@@ -63,6 +65,11 @@ namespace Resonance
 		}
 
 		m_AttackButton.Update();
+
+		if (m_Hand.HasLost())
+		{
+			m_Switcher->SwitchTo(1);
+		}
 
 		BeginDrawing();
 			ClearBackground(BLACK);

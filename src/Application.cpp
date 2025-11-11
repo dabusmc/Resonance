@@ -5,6 +5,7 @@
 #include "raylib.h"
 
 #include "Scene/GameScene.h"
+#include "Scene/LoseScene.h"
 
 namespace Resonance
 {
@@ -24,12 +25,12 @@ namespace Resonance
 
     void Application::Run()
     {
-        GameScene scene;
-        scene.Init();
+        m_Switcher.AddScene<GameScene>();
+        m_Switcher.AddScene<LoseScene>();
 
         while (!WindowShouldClose())
         {
-            scene.Update();
+            m_Switcher.Update();
         }
     }
 

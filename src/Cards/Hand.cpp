@@ -54,6 +54,7 @@ namespace Resonance
         m_Lost = false;
     }
 
+    // FIXME: It is still possible to draw no waveform cards when the hand has none also
     bool Hand::NextHand(Deck &deck)
     {
         if (m_Lost)
