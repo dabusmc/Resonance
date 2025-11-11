@@ -16,6 +16,7 @@ namespace Resonance
 			m_Deck.AddCard(CardType::Square);
 			m_Deck.AddCard(CardType::Echo);
 			m_Deck.AddCard(CardType::LowFrequency);
+			m_Deck.AddCard(CardType::HighFrequency);
 			m_Deck.AddCard(CardType::Phase);
 		}
 

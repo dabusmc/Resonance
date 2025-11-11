@@ -6,6 +6,7 @@
 #include "Types/EchoCard.h"
 
 #include "raylib.h"
+#include "Types/HighFrequencyCard.h"
 #include "Types/LowFrequencyCard.h"
 #include "Types/PhaseCard.h"
 #include "Types/SquareCard.h"
@@ -29,6 +30,8 @@ namespace Resonance
                 return new EchoCard(position);
             case CardType::LowFrequency:
                 return new LowFrequencyCard(position);
+            case CardType::HighFrequency:
+                return new HighFrequencyCard(position);
             default:
                 return new SineCard(position);
         }
@@ -304,8 +307,8 @@ namespace Resonance
                 {
                     if (auto* frequency = dynamic_cast<FrequencyCard*>(card))
                     {
-                        armorDamageModifier = frequency->GetArmorDamageModifier();
-                        healthDamageModifier = frequency->GetHealthDamageModifier();
+                        armorDamageModifier *= frequency->GetArmorDamageModifier();
+                        healthDamageModifier *= frequency->GetHealthDamageModifier();
                     }
                     break;
                 }

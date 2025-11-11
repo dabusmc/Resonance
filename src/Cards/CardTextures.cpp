@@ -17,6 +17,7 @@ namespace Resonance
 
 		// Frequencies
 		LoadTexture(CardTexture::LowFrequency, "low_frequency");
+		LoadTexture(CardTexture::HighFrequency, "high_frequency");
 
 		// Amplitude
 		LoadTexture(CardTexture::Echo, "echo");

@@ -10,7 +10,7 @@ namespace Resonance
 	{
 		Blank = 0,
 		Sine, Square,
-		LowFrequency,
+		LowFrequency, HighFrequency,
 		Echo,
 		Phase
 	};

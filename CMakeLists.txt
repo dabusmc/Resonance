@@ -45,7 +45,8 @@ set(SOURCE src/main.cpp
         src/Scene/SceneSwitcher.cpp
         src/Utility/Files.cpp
         src/Cards/CardTextures.cpp
-        src/Cards/Types/SquareCard.cpp)
+        src/Cards/Types/SquareCard.cpp
+        src/Cards/Types/HighFrequencyCard.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 target_link_libraries(${PROJECT_NAME} raylib)

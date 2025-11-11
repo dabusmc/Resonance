@@ -18,7 +18,7 @@ namespace Resonance
         None = 0,
         Sine, Square,
         Echo,
-        LowFrequency,
+        LowFrequency, HighFrequency,
         Phase
     };
 

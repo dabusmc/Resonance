@@ -14,6 +14,7 @@ namespace Resonance
             case CardType::Echo:
                 return CardCategory::Amplitude;
             case CardType::LowFrequency:
+            case CardType::HighFrequency:
                 return CardCategory::Frequency;
             case CardType::Phase:
                 return CardCategory::Utility;
