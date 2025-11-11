@@ -22,6 +22,7 @@ namespace Resonance
         void Construct(Deck& deck);
 
         void ClearSelection();
+        void ClearSelectedCardsFromHand();
         void ClearHand();
 
         void Update();
@@ -37,6 +38,8 @@ namespace Resonance
 
         bool m_HandHasWaveformCard;
         bool m_WaveformCardSelected;
+
+        bool m_ForceWaveformCard;
 
         bool m_Lost;
 

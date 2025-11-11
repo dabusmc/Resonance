@@ -76,8 +76,8 @@ namespace Resonance
             m_Lost = true;
         }
 
+        ClearSelectedCardsFromHand();
         ClearSelection();
-        ClearHand();
         Construct(deck);
 
         return true;
@@ -94,28 +94,39 @@ namespace Resonance
 
         for (int i = 0; i < 5; i++)
         {
-            CardType type = (i == waveformIndex) ? deck.DrawWaveformCard() : deck.DrawCard();
-
-            if (deck.WaveformCardsRemaining() == 0)
+            if (!m_Hand[i])
             {
-                if (!m_HandHasWaveformCard)
+                CardType type;
+                if (m_ForceWaveformCard || (i == waveformIndex && !m_HandHasWaveformCard))
                 {
-                    std::cout << "No more waveform cards! YOU LOSE!!!!" << std::endl;
-                    m_Lost = true;
-                    return;
+                    type = deck.DrawWaveformCard();
                 }
-            }
-
-            if (type == CardType::None)
-            {
-                m_Hand[i].reset();
-            }
-            else
-            {
-                m_Hand[i] = std::unique_ptr<Card>(ConstructCardFromType(type, i));
-                if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
+                else
                 {
-                    m_HandHasWaveformCard = true;
+                    type = deck.DrawCard();
+                }
+
+                if (deck.WaveformCardsRemaining() == 0)
+                {
+                    if (!m_HandHasWaveformCard)
+                    {
+                        std::cout << "No more waveform cards! YOU LOSE!!!!" << std::endl;
+                        m_Lost = true;
+                        return;
+                    }
+                }
+
+                if (type == CardType::None)
+                {
+                    m_Hand[i].reset();
+                }
+                else
+                {
+                    m_Hand[i] = std::unique_ptr<Card>(ConstructCardFromType(type, i));
+                    if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
+                    {
+                        m_HandHasWaveformCard = true;
+                    }
                 }
             }
         }
@@ -129,6 +140,35 @@ namespace Resonance
         }
         m_WaveformCardSelected = false;
         m_Selected.clear();
+    }
+
+    void Hand::ClearSelectedCardsFromHand()
+    {
+        int resetCount = 0;
+        for (int index : m_Selected)
+        {
+            if (m_Hand[index])
+            {
+                m_Hand[index].reset();
+                resetCount += 1;
+            }
+        }
+
+        m_HandHasWaveformCard = false;
+        for (auto& card : m_Hand)
+        {
+            if (!card) continue;
+
+            if (card->GetCategory() == CardCategory::Waveform)
+            {
+                m_HandHasWaveformCard = true;
+            }
+        }
+
+        if (resetCount == 1 && !m_HandHasWaveformCard)
+        {
+            m_ForceWaveformCard = true;
+        }
     }
 
     void Hand::ClearHand()
