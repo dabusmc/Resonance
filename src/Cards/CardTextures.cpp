@@ -13,6 +13,7 @@ namespace Resonance
 
 		// Waveforms
 		LoadTexture(CardTexture::Sine, "sine");
+		LoadTexture(CardTexture::Square, "square");
 
 		// Frequencies
 		LoadTexture(CardTexture::LowFrequency, "low_frequency");

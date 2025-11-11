@@ -16,7 +16,7 @@ namespace Resonance
     enum class CardType
     {
         None = 0,
-        Sine,
+        Sine, Square,
         Echo,
         LowFrequency,
         Phase

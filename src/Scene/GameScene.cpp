@@ -13,6 +13,7 @@ namespace Resonance
 		for (int i = 0; i < 5; i++)
 		{
 			m_Deck.AddCard(CardType::Sine);
+			m_Deck.AddCard(CardType::Square);
 			m_Deck.AddCard(CardType::Echo);
 			m_Deck.AddCard(CardType::LowFrequency);
 			m_Deck.AddCard(CardType::Phase);

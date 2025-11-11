@@ -8,6 +8,7 @@
 #include "raylib.h"
 #include "Types/LowFrequencyCard.h"
 #include "Types/PhaseCard.h"
+#include "Types/SquareCard.h"
 #include "Utility/Random.h"
 
 namespace Resonance
@@ -20,6 +21,8 @@ namespace Resonance
         {
             case CardType::Sine:
                 return new SineCard(position);
+            case CardType::Square:
+                return new SquareCard(position);
             case CardType::Phase:
                 return new PhaseCard(position);
             case CardType::Echo:
@@ -332,12 +335,12 @@ namespace Resonance
 
         if (repeatAttack)
         {
-            std::cout << "Damage Amount: " << damageAmount << std::endl;
+            std::cout << "Damage Amount: " << static_cast<int>(damageAmount * 0.75f) << std::endl;
             std::cout << "Ignore Armor: " << ignoreArmor << std::endl;
             std::cout << "Armor Damage Modifier: " << armorDamageModifier << std::endl;
             std::cout << "Health Damage Modifier: " << healthDamageModifier << std::endl;
 
-            enemy.Damage(damageAmount, ignoreArmor, armorDamageModifier, healthDamageModifier);
+            enemy.Damage(static_cast<int>(damageAmount * 0.75f), ignoreArmor, armorDamageModifier, healthDamageModifier);
 
             std::cout << "Enemy Health: " << enemy.GetHealth() << std::endl;
             std::cout << "Enemy Armor: " << enemy.GetArmor() << std::endl;

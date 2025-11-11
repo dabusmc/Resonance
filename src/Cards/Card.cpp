@@ -9,6 +9,7 @@ namespace Resonance
         switch (type)
         {
             case CardType::Sine:
+            case CardType::Square:
                 return CardCategory::Waveform;
             case CardType::Echo:
                 return CardCategory::Amplitude;

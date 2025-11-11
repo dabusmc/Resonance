@@ -9,7 +9,7 @@ namespace Resonance
 	enum class CardTexture
 	{
 		Blank = 0,
-		Sine,
+		Sine, Square,
 		LowFrequency,
 		Echo,
 		Phase
