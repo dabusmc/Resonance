@@ -41,8 +41,6 @@ namespace Resonance
         bool m_HandHasWaveformCard;
         bool m_WaveformCardSelected;
 
-        bool m_ForceWaveformCard;
-
         bool m_Lost;
 
         bool m_AttackRunning;

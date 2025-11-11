@@ -54,7 +54,6 @@ namespace Resonance
         m_Lost = false;
     }
 
-    // FIXME: It is still possible to draw no waveform cards when the hand has none also
     bool Hand::NextHand(Deck &deck)
     {
         if (m_Lost)
@@ -91,43 +90,61 @@ namespace Resonance
 
         m_WaveformCardSelected = false;
         m_HandHasWaveformCard = false;
-        int waveformIndex = Random::Range(0, 4);
 
+        std::vector<int> cardsToReplace;
         for (int i = 0; i < 5; i++)
         {
             if (!m_Hand[i])
             {
-                CardType type;
-                if (m_ForceWaveformCard || (i == waveformIndex && !m_HandHasWaveformCard))
+                cardsToReplace.push_back(i);
+            }
+            else
+            {
+                if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
                 {
-                    type = deck.DrawWaveformCard();
+                    m_HandHasWaveformCard = true;
                 }
-                else
-                {
-                    type = deck.DrawCard();
-                }
+            }
+        }
 
-                if (deck.WaveformCardsRemaining() == 0)
-                {
-                    if (!m_HandHasWaveformCard)
-                    {
-                        std::cout << "No more waveform cards! YOU LOSE!!!!" << std::endl;
-                        m_Lost = true;
-                        return;
-                    }
-                }
+        int waveformIndex = -1;
+        if (!m_HandHasWaveformCard)
+        {
+            waveformIndex = cardsToReplace[Random::Range(0, cardsToReplace.size() - 1)];
+        }
 
-                if (type == CardType::None)
+        for (int i : cardsToReplace)
+        {
+            CardType type;
+            if (i == waveformIndex)
+            {
+                type = deck.DrawWaveformCard();
+            }
+            else
+            {
+                type = deck.DrawCard();
+            }
+
+            if (deck.WaveformCardsRemaining() == 0)
+            {
+                if (!m_HandHasWaveformCard)
                 {
-                    m_Hand[i].reset();
+                    std::cout << "No more waveform cards! YOU LOSE!!!!" << std::endl;
+                    m_Lost = true;
+                    return;
                 }
-                else
+            }
+
+            if (type == CardType::None)
+            {
+                m_Hand[i].reset();
+            }
+            else
+            {
+                m_Hand[i] = std::unique_ptr<Card>(ConstructCardFromType(type, i));
+                if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
                 {
-                    m_Hand[i] = std::unique_ptr<Card>(ConstructCardFromType(type, i));
-                    if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
-                    {
-                        m_HandHasWaveformCard = true;
-                    }
+                    m_HandHasWaveformCard = true;
                 }
             }
         }
@@ -153,22 +170,6 @@ namespace Resonance
                 m_Hand[index].reset();
                 resetCount += 1;
             }
-        }
-
-        m_HandHasWaveformCard = false;
-        for (auto& card : m_Hand)
-        {
-            if (!card) continue;
-
-            if (card->GetCategory() == CardCategory::Waveform)
-            {
-                m_HandHasWaveformCard = true;
-            }
-        }
-
-        if (resetCount == 1 && !m_HandHasWaveformCard)
-        {
-            m_ForceWaveformCard = true;
         }
     }
 
