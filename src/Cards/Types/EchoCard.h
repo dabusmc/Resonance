@@ -9,6 +9,6 @@ namespace Resonance
 	public:
 		EchoCard(int position);
 
-		void Draw() override;
+		void Draw(CardTextures& textures) override;
 	};
 }

@@ -1,5 +1,7 @@
 #include "Card.h"
 
+#include "Utility/Files.h"
+
 namespace Resonance
 {
     CardCategory Card::GetCategoryFromType(CardType type)

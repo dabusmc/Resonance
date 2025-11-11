@@ -142,6 +142,8 @@ namespace Resonance
             else
             {
                 m_Hand[i] = std::unique_ptr<Card>(ConstructCardFromType(type, i));
+                m_Hand[i]->SetBorderColor(WHITE);
+                m_Hand[i]->SetBackgroundColor(BLACK);
                 if (m_Hand[i]->GetCategory() == CardCategory::Waveform)
                 {
                     m_HandHasWaveformCard = true;
@@ -182,6 +184,7 @@ namespace Resonance
         m_HandHasWaveformCard = false;
     }
 
+    // FIXME: You can currently select a card more than once
     void Hand::Update()
     {
         if (m_Lost)
@@ -240,7 +243,7 @@ namespace Resonance
     {
         for (auto& card : m_Hand)
         {
-            if (card && !m_Lost) card->Draw();
+            if (card && !m_Lost) card->Draw(m_CardTextures);
         }
     }
 

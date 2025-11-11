@@ -42,11 +42,15 @@ set(SOURCE src/main.cpp
         src/Cards/Base/UtilityCard.cpp
         src/Scene/GameScene.cpp
         src/Scene/LoseScene.cpp
-        src/Scene/SceneSwitcher.cpp)
+        src/Scene/SceneSwitcher.cpp
+        src/Utility/Files.cpp
+        src/Cards/CardTextures.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 target_link_libraries(${PROJECT_NAME} raylib)
 target_include_directories(${PROJECT_NAME} PUBLIC src)
+
+file(COPY res DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 # Web Configurations
 if (${PLATFORM} STREQUAL "Web")

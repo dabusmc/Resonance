@@ -9,7 +9,11 @@ namespace Resonance
 	public:
 		FrequencyCard(CardType type, int position);
 
-		virtual float GetArmorDamageModifier() = 0;
-		virtual float GetHealthDamageModifier() = 0;
+		float GetArmorDamageModifier() const { return m_ArmorDamage; }
+		float GetHealthDamageModifier() const { return m_HealthDamage; }
+
+	protected:
+		float m_ArmorDamage = 1.0f;
+		float m_HealthDamage = 1.0f;
 	};
 }

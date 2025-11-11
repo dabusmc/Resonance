@@ -9,6 +9,6 @@ namespace Resonance
     public:
         SineCard(int position);
 
-        void Draw() override;
+        void Draw(CardTextures& textures) override;
     };
 }

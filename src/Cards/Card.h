@@ -1,5 +1,10 @@
 #pragma once
 
+#include <string>
+
+#include "CardTextures.h"
+#include "raylib.h"
+
 namespace Resonance
 {
     enum class CardCategory
@@ -36,9 +41,12 @@ namespace Resonance
         void UpdateHovered(int mouseX, int mouseY);
         void SetHovered(bool hovered);
 
+        void SetBackgroundColor(Color color) { m_Background = color; }
+        void SetBorderColor(Color color) { m_Border = color; }
+
         void SetSelected(bool selected);
 
-        virtual void Draw() = 0;
+        virtual void Draw(CardTextures& textures) = 0;
 
     protected:
         int GetXPosition();
@@ -51,5 +59,8 @@ namespace Resonance
 
         bool m_Hovered;
         bool m_Selected;
+
+        Color m_Background;
+        Color m_Border;
     };
 }

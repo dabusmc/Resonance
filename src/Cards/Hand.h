@@ -38,6 +38,8 @@ namespace Resonance
         std::array<std::unique_ptr<Card>, 5> m_Hand;
         std::vector<int> m_Selected;
 
+        CardTextures m_CardTextures;
+
         bool m_HandHasWaveformCard;
         bool m_WaveformCardSelected;
 
